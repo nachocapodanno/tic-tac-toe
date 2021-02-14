@@ -1,5 +1,6 @@
 import Square from "./Square";
 import { useEffect, useState } from "react";
+import { Button } from "@material-ui/core";
 
 const Board = () => {
 
@@ -7,6 +8,7 @@ const Board = () => {
     const [squareValues, setValuesSquare] = useState(Array(9).fill(null));
     const [turnX, setTurn] = useState(true);
     const [isWinner, setIsWinner] = useState(false);
+    const [isFinished, setIsFinished] = useState(false);
 
     useEffect(() => {
         const lines = [
@@ -24,6 +26,7 @@ const Board = () => {
               const [a,b,c] = element;
               if (squareValues[a] && (squareValues[a] === squareValues[b]) && (squareValues[a] === squareValues[c])) {
                 setIsWinner(true);
+                setIsFinished(true);
             }
           });
     });
@@ -37,6 +40,13 @@ const Board = () => {
 
     const renderSquare = pos => {
         return <Square onClick={() => setValue(pos)} value={squareValues[pos]}/>
+    }
+
+    const restartGame = () => {
+        setValuesSquare(Array(9).fill(null));
+        setIsWinner(false);
+        setTurn(true);
+        setIsFinished(false);
     }
 
     return (
@@ -59,6 +69,11 @@ const Board = () => {
                     {renderSquare(7)}
                     {renderSquare(8)}
                 </div>
+            </div>
+            <div style={{marginTop: '15px'}} >
+            {isFinished && <Button onClick={() => restartGame()} variant="contained" color="secondary" component="span">
+                Restart
+            </Button>}
             </div>
         </div>
     );
